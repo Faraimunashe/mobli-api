@@ -17,7 +17,11 @@ use Illuminate\Support\Facades\Route;
 
 //auth routes
 Route::post('/register', [AuthController::class, 'register']);
-Route::post('/login', [AuthController::class, 'login']);
+
+Route::middleware(['cors'])->group(function () {
+    Route::post('/login', [AuthController::class, 'login']);
+});
+
 
 //protected routes
 Route::group(['middleware' => ['auth:sanctum']], function () {
