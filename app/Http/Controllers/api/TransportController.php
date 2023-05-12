@@ -11,7 +11,9 @@ class TransportController extends Controller
 {
     public function index()
     {
-        $trans = Transport::all();
+        $trans = Transport::join('services', 'services.id', '=', 'transports.service_id')
+            ->select('transports.id', 'services.name as service', 'transports.from', 'transports.to', 'transports.departure', 'transports.arrival', 'transports.capacity', 'transports.phone')
+        ->get();
 
         $response = [
             'transports' => $trans,
@@ -70,7 +72,10 @@ class TransportController extends Controller
 
     public function one($id)
     {
-        $trans = Transport::find($id);
+        $trans = Transport::join('services', 'services.id', '=', 'transports.service_id')
+            ->where('transports.id', $id)
+            ->select('transports.id', 'services.name as service', 'transports.from', 'transports.to', 'transports.departure', 'transports.arrival', 'transports.capacity', 'transports.phone')
+        ->first();
         if(is_null($trans))
         {
             $response = [
